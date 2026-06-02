@@ -5,14 +5,13 @@
 
 Vector3 rotate(Vector3 A, float angle){
 
-
     return (Vector3) { 
-        A.x * cosf(angle)+A.y*0 +A.z*sinf(angle),
+        A.x * cosf(angle) +A.z*sinf(angle),
         A.y,
-        -A.x * sinf(angle) + A.y * 0 + A.z * cosf(angle)
+        -A.x * sinf(angle) + A.z * cosf(angle)
     };
 }
-float cubeCentre = 1.5f;
+const float cubeCentre = 1.5f;
 Vector3 center(Vector3 p)
 {
     return (Vector3){
@@ -25,7 +24,7 @@ int main()
     InitWindow(width,height,"3DCube");
     SetTargetFPS(60);
     Camera camera = { 0 };
-    camera.position = (Vector3){ 10.0f, 10.0f, 8.0f };
+    camera.position = (Vector3){ 0.0f, 0.0f, 8.0f };
     camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
     camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
     camera.fovy = 60.0f;
@@ -45,15 +44,15 @@ int main()
     Vector3 c7 = {A.x + r*E1.x + r*E2.x+ r*E3.x, A.y + r*E1.y + r*E2.y+ r*E3.y, A.z + r*E1.z + r*E2.z+ r*E3.z};
     float lineWidth = 0.1f;
     
-
     float angle = 0.0f;
     while(!WindowShouldClose())
     {
         BeginDrawing();
         ClearBackground(BLACK);
         BeginMode3D(camera);
-        DrawGrid(10.0f,1.0f);
+        //DrawGrid(10.0f,1.0f);
         
+        //original points before being centered and rotated.
         // DrawSphere(c0,lineWidth,RED);
         // DrawSphere(c1,lineWidth,GRAY);
         // DrawSphere(c2,lineWidth,GREEN);
@@ -64,14 +63,14 @@ int main()
         // DrawSphere(c7,lineWidth,ORANGE);
 
 
-        // DrawSphere(rotate(center(c0),angle),lineWidth,RED);
-        // DrawSphere(rotate(center(c1),angle),lineWidth,GRAY);
-        // DrawSphere(rotate(center(c2),angle),lineWidth,GREEN);
-        // DrawSphere(rotate(center(c3),angle),lineWidth,BLUE);
-        // DrawSphere(rotate(center(c4),angle),lineWidth,PINK);
-        // DrawSphere(rotate(center(c5),angle),lineWidth,YELLOW);
-        // DrawSphere(rotate(center(c6),angle),lineWidth,PURPLE);
-        // DrawSphere(rotate(center(c7),angle),lineWidth,ORANGE);
+        DrawSphere(rotate(center(c0),angle),lineWidth,RED);
+        DrawSphere(rotate(center(c1),angle),lineWidth,GRAY);
+        DrawSphere(rotate(center(c2),angle),lineWidth,GREEN);
+        DrawSphere(rotate(center(c3),angle),lineWidth,BLUE);
+        DrawSphere(rotate(center(c4),angle),lineWidth,PINK);
+        DrawSphere(rotate(center(c5),angle),lineWidth,YELLOW);
+        DrawSphere(rotate(center(c6),angle),lineWidth,PURPLE);
+        DrawSphere(rotate(center(c7),angle),lineWidth,ORANGE);
         
         
         DrawCylinderEx(rotate(center(c0),angle),rotate(center(c1),angle),lineWidth,lineWidth,2,BROWN);
@@ -89,7 +88,25 @@ int main()
         DrawCylinderEx(rotate(center(c5),angle),rotate(center(c7),angle),lineWidth,lineWidth,2,ORANGE);
         DrawCylinderEx(rotate(center(c6),angle),rotate(center(c7),angle),lineWidth,lineWidth,2,RED);
 
-        angle += 0.02f;
+        if(IsKeyDown(KEY_DOWN))
+        {
+            camera.target.y+=0.1;
+        }
+        else if(IsKeyDown(KEY_UP))
+        {
+            camera.target.y-=0.1;
+        }
+        else if(IsKeyDown(KEY_RIGHT))
+        {
+            camera.target.x+=0.1;
+        }
+        else if(IsKeyDown(KEY_LEFT))
+        {
+            camera.target.x-=0.1;
+        }
+        
+
+        angle += 0.01f;
         EndMode3D();
 
         EndDrawing();
